@@ -44,7 +44,7 @@ class Response
             $data = json_decode($this->response->getBody(), true);
             $this->arr = $data['items'] ?? $data;
 
-            if( array_key_exists('paging', $data) && array_key_exists('next_cursor', $data['paging']['next_cursor']) ) {
+            if( array_key_exists('paging', $data) && array_key_exists('next_cursor', $data['paging']) ) {
                 $this->cursor = $data['paging']['next_cursor'];
             }
         }
