@@ -10,6 +10,7 @@ class Response
     protected $response;
     protected $clnt;
     protected $filter;
+    protected $cursor = null;
 
     private $arr;
 
@@ -30,25 +31,24 @@ class Response
         return $this->response;
     }
 
+    public function getCursor()
+    {
+        return $this->cursor;
+    }
+
     public function toArray()
     {
+        $this->cursor = null;
+
         if (!$this->arr) {
             $data = json_decode($this->response->getBody(), true);
             $this->arr = $data['items'] ?? $data;
-        }
-        /*
-        if($this->filter) {
-            if($this->arr) {
-                foreach($this->arr as $item) {
-                    if($item && isset($item['id'])) {
-                        if(strtolower($item['id']) == strtolower($this->filter)) {
-                            return $item;
-                        }
-                    }
-                }
+
+            if( array_key_exists('paging', $data) && array_key_exists('next_cursor', $data['paging']['next_cursor']) ) {
+                $this->cursor = $data['paging']['next_cursor'];
             }
         }
-        */
+
         return $this->arr;
     }
 

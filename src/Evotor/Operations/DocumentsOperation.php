@@ -20,6 +20,10 @@ class DocumentsOperation extends Operation
 
     protected function init($args)
     {
+        if( is_array($args) ) {
+            $this->data = $args;
+        }
+
         if ($this->prev_operation) {
             if ($this->prev_operation instanceof StoresOperation) {
                 $this->path = str_replace('{store_id}', $this->prev_operation->id(), self::PATH);
